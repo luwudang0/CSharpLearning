@@ -52,6 +52,10 @@ class GenericListTest
         Console.WriteLine("Remove all 2");
         PrintList(list);
 
+        list.RemoveAtIndex(0);
+        Console.WriteLine("Remove the element at index 0: ");
+        PrintList(list);
+
         Console.Write($"Is the list empty? {list.IsEmpty()}");
 
     }
@@ -67,7 +71,7 @@ class GenericListTest
     }
 }
 
-class GenericList<T> 
+class GenericList<T>
 {
     private class Node
     {
@@ -94,7 +98,7 @@ class GenericList<T>
     private int length;
     public int Length
     {
-        get;set;
+        get; set;
     }
 
     public GenericList()
@@ -118,14 +122,14 @@ class GenericList<T>
     public void AddLast(T t)
     {
         Node newNode = new Node(t);
-        if(head == null) 
-        { 
+        if (head == null)
+        {
             head = newNode;
         }
         else
         {
             Node cur = head;
-            while(cur.Next != null)
+            while (cur.Next != null)
             {
                 cur = cur.Next;
             }
@@ -135,7 +139,7 @@ class GenericList<T>
     }
     public void RemoveHead()
     {
-        if(head == null)
+        if (head == null)
         {
             Console.WriteLine("Empty list.");
         }
@@ -154,7 +158,7 @@ class GenericList<T>
         else
         {
             Node cur = head;
-            while(cur.Next.Next != null)
+            while (cur.Next.Next != null)
             {
                 cur = cur.Next;
             }
@@ -164,15 +168,15 @@ class GenericList<T>
     }
     public void RemoveValue(T t)
     {
-        if(head == null)
+        if (head == null)
         {
             Console.WriteLine("Empty list.");
         }
         else
         {
-            if(Length == 1)
+            if (Length == 1)
             {
-               if(head.Data.Equals(t))
+                if (head.Data.Equals(t))
                 {
                     head = null;
                 }
@@ -187,14 +191,14 @@ class GenericList<T>
                 Node prev = head;
                 while (cur != null)
                 {
-                    if(cur.Next != null && cur.Next.Data.Equals(t))
+                    if (cur.Next != null && cur.Next.Data.Equals(t))
                     {
                         prev = cur;
                     }
 
                     if (cur.Data.Equals(t))
                     {
-                        if(cur == head)// if the value to be deleted at head.
+                        if (cur == head)// if the value to be deleted at head.
                         {
                             head = cur.Next;
                         }
@@ -262,7 +266,44 @@ class GenericList<T>
     }
     public void RemoveAtIndex(int index)
     {
-        //todo
+        if(index < 0 || index > Length - 1)
+        {
+            throw new ArgumentOutOfRangeException($"{index}");
+        }
+
+        if (IsEmpty())
+        {
+            Console.WriteLine("Empty list.");
+            return;
+        }
+
+        if(Length == 1)
+        {
+            head = null;
+        }
+        else
+        {
+            Node cur = head;
+            Node prev = head;
+
+            if(index == 0)
+            {
+                head = head.Next;
+                Length--;
+                return;
+            }
+
+            while(index != 0)
+            {
+                if(index - 1 == 0) { prev = cur; }
+                cur = cur.Next;
+                index--;
+            }
+            prev.Next = cur.Next;
+            Length--;
+        }
+
+
     }
     public void InsertAtIndex(T t, int index)
     {
@@ -271,16 +312,16 @@ class GenericList<T>
         // check the index valid or not.
         if (index < 0 || index > Length - 1)
         {
-            throw new IndexOutOfRangeException();
+            throw new ArgumentOutOfRangeException($"{index}");
         }
 
-        if(index == 0) 
-        { 
-            AddHead(t); 
+        if (index == 0)
+        {
+            AddHead(t);
         }
         else
-        {   
-            if(Length == 1)
+        {
+            if (Length == 1)
             {
                 head.Next = newNode;
                 Length++;
